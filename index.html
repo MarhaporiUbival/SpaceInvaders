@@ -1,13 +1,24 @@
 <!DOCTYPE html>
 <html>
-    <head>
-	<a href="https://github.com/MarhaporiUbival/SpaceInvaders">Github Repo</a>
-        <title>Space Invaders</title>
-        <link rel="stylesheet" href="index.css">
-        <link href='https://fonts.googleapis.com/css?family=Play:400,700'>
-    </head>
-    <body>
-        <canvas id="game-canvas" width="640" height="640"></canvas>
-        <script src="index.js"></script>
-    </body>
+<head>
+    <title>Space Invaders</title>
+    <link rel="stylesheet" href="index.css">
+    <link href='https://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet'>
+</head>
+<body>
+    <canvas id="game-canvas" width="640" height="640"></canvas>
+    <div id="username-display"></div>
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        const username = getQueryParam('username');
+        if (username) {
+            document.getElementById('username-display').innerText = `Player: ${username}`;
+        }
+    </script>
+    <script src="index.js"></script>
+</body>
 </html>

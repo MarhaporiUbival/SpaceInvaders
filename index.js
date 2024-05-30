@@ -18,7 +18,7 @@
              
               this._super = _super[name];
              
-              var ret = fn.apply(this, arguments);        
+              var ret = fn.apply(this, arguments);
               this._super = tmp;
              
               return ret;
@@ -28,6 +28,7 @@
       }
      
       function Class() {
+        // All construction is actually done in the init method
         if ( !initializing && this.init )
           this.init.apply(this, arguments);
       }
@@ -543,6 +544,13 @@
       }
     }
   }
+
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    let username = urlParams.get(param);
+    return username;
+  }
+  let user = getQueryParam('username') || 'unknown_player';
   
   function resolveBulletPlayerCollisions() {
     for (var i = 0, len = aliens.length; i < len; i++) {
@@ -550,6 +558,24 @@
       if (alien.bullet !== null && checkRectCollision(alien.bullet.bounds, player.bounds)) {
         if (player.lives === 0) {
           hasGameStarted = false;
+  
+          var form_data = new FormData();
+          form_data.append('username', user);
+          form_data.append('score', player.score);
+          var request = new XMLHttpRequest();
+      
+          request.onload = () => {
+              alert(request.responseText);
+          };
+      
+          request.onerror = () => {
+              alert(request.responseText);
+          };
+      
+          request.open('post', 'upload_score.php');
+          request.send(form_data);
+          //game ends here
+          window.location.href = 'scoreboard.php';
         } else {
          alien.bullet.alive = false;
          particleManager.createExplosion(player.position.x, player.position.y, 'green', 100, 8,8,6,0.001,40);
